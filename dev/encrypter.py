@@ -1,7 +1,7 @@
 import argparse
 import sys
 import json
-import math
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('encrypt_type', type=str)
@@ -24,7 +24,7 @@ s = ''
 for alph in alphs:
     s = s + alph
 
-if not args.encrypt_type in ['encode', 'decode', 'train', 'hack']:
+if args.encrypt_type not in ['encode', 'decode', 'train', 'hack']:
     print('Неизвестная команда, используйте encode, decode, train, hack')
 
 if args.input_file == '':
@@ -91,15 +91,26 @@ if (args.encrypt_type == 'encode' or args.encrypt_type == 'decode'):
             try:
                 char = s[(s.index(letter) + k * s.index(args.key[c])) % len(s)]
             except ValueError:
-                print("\nКодирование таким ключом не предусмотрено программой, используйте символы:\n\'" + alphs[0] + '\', а также буквы русского и латинского алфавитов')
+                print("\nКодирование таким ключом не", end='')
+                print("предусмотрено программой,", end='')
+                print("используйте символы:\n\'" + alphs[0])
+                print(", а также буквы русского и латинского алфавитов")
                 exit()
 
         elif (args.chipher == 'vernam'):
             c = (c + 1) % len(args.key)
-            char = s[s.index(letter) ^ s.index(args.key[c])]
+            try:
+                char = s[s.index(letter) ^ s.index(args.key[c])]
+            except ValueError:
+                print("\nКодирование таким ключом не", end='')
+                print("предусмотрено программой,", end='')
+                print("используйте символы:\n\'" + alphs[0])
+                print(", а также буквы русского и латинского алфавитов")
+                exit()
 
         else:
-            print("\nТакого шифра не предусмотрено(используйте caesar, vigenere, vernam)")
+            print("\nТакого шифра не предусмотрено", end='')
+            print("(используйте caesar, vigenere, vernam)")
             exit()
 
         output_text = output_text + char
@@ -168,7 +179,7 @@ if (args.encrypt_type == 'train'):
 if (args.encrypt_type == 'hack'):
 
     #  индекс совпадения строки
-    def I(string, alph):
+    def findI(string, alph):
         freq = {}  # type: dict
         for letter in alph:
             freq.setdefault(letter, 0)
@@ -182,7 +193,6 @@ if (args.encrypt_type == 'hack'):
             summ = summ + freq[letter]*(freq[letter] - 1)
         summ = float(summ / (len(string) * (len(string) - 1)))
         return summ
-
 
     #  взаимный индекс совпадения строк
     def MI(string1, string2, alph):
@@ -240,11 +250,11 @@ if (args.encrypt_type == 'hack'):
                 line = line + mit[i]
             sl.append(line)
 
-        meanI = 0
+        meanI = float(0)
         for line in sl:
-            meanI = meanI + I(line, s)
+            meanI = meanI + findI(line, s)
 
-        meanI = float (meanI / t)
+        meanI = float(meanI / t)
         if meanI > 0.05:
             key_len = t
             break
@@ -284,7 +294,7 @@ if (args.encrypt_type == 'hack'):
     input_textv = ''
     count = 0
     for letter in input_text:
-        if not letter in s:
+        if letter not in s:
             input_textv = input_textv + letter
         else:
             input_textv = input_textv + mit[count]
@@ -319,7 +329,7 @@ if (args.encrypt_type == 'hack'):
         for key in current_freq.keys():
             current_freq[key] = float(current_freq[key] / count)
 
-    current_freqv = {}
+    current_freqv = {}  # type: dict
     for letter in s:
         current_freqv.setdefault(letter, 0)
 
@@ -333,7 +343,7 @@ if (args.encrypt_type == 'hack'):
         for key in current_freqv.keys():
             current_freqv[key] = float(current_freqv[key] / count)
 
-    m = len(s) + 1
+    m = float(len(s) + 1)
     key = 0
     b = True
     for j in range(len(s)):
@@ -360,8 +370,8 @@ if (args.encrypt_type == 'hack'):
                 value = current_freq[k]
                 valuev = current_freqv[k]
             i = i + 1
-            current_freq[k] = current_freq[s[(s.index(k) + 1) % len(s)]]
-            current_freqv[k] = current_freqv[s[(s.index(k) + 1) % len(s)]]
+            current_freq[k] = current_freq[s[(s.index(str(k)) + 1) % len(s)]]
+            current_freqv[k] = current_freqv[s[(s.index(str(k)) + 1) % len(s)]]
             if (i == len(current_freq)):
                 current_freq[k] = value
                 current_freqv[k] = valuev

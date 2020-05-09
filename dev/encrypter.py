@@ -3,12 +3,11 @@ import sys
 import pickle
 
 
-alph = ''  # type: str
-alph += ' .,;:-!?()'
-alph += 'abcdefghijklmnopqrstuvwxyz'
-alph += 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
-alph += 'abcdefghijklmnopqrstuvwxyz'.upper()
-alph += 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.upper()
+alph = (' .,;:-!?()'
+        'abcdefghijklmnopqrstuvwxyz'
+        'абвгдеёжзийклмнопрстуфхцчшщъыьэюя' +
+        'abcdefghijklmnopqrstuvwxyz'.upper() +
+        'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'.upper())
 
 
 def find_freq(text: str, my_dict: dict) -> None:
@@ -65,7 +64,7 @@ def find_key_len(my_input_text: str) -> int:
     res = 0  # type: int
     for t in range(1, len(my_input_text) - 1):
         sl = []
-        for j in range(0, t):
+        for j in range(t):
             line = ''
             for i in range(j, len(my_input_text), t):
                 line += my_input_text[i]
@@ -85,7 +84,7 @@ def find_key_len(my_input_text: str) -> int:
 
 def find_relative_displacement(my_input_text: str, key_len: int) -> list:
     sl = []
-    for j in range(0, key_len):
+    for j in range(key_len):
         line = ''
         for i in range(j, len(my_input_text), key_len):
             line += my_input_text[i]
@@ -207,17 +206,14 @@ def find_res_list(input_text: str, input_textv: str, model_dict: dict) -> list:
         shift(current_freq)
         shift(current_freqv)
 
-    res = []
+    res = []  # type: list
     res.append(result_key)
     res.append(b)
     return res
 
 
 def set_dict() -> dict:
-    res = {}  # type: dict
-    for letter in alph:
-        res.setdefault(letter, 0)
-
+    res = {letter : float(0) for letter in alph}
     return res
 
 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Encrypter</title>
+        <meta charset='utf-8'/>
+        <link rel="stylesheet" href="templates/style.css">
+    </head>
+    <body>
+        <div id="encrypt_block">
+            <form action = "/encrypt" name="encrypt" id="encrypt_form" method="post">
+                <h>ENCRYPT</h><br/>
+                <textarea name="input_text" required=true placeholder="Input text"></textarea><br/>
+                <textarea name="key" required=true placeholder="Key"></textarea><br/>
+                <select name="cipher" required=true>
+                    <optgroup label="Cipher: ">
+                        <option value="ceasar">Ceasar</option>
+                        <option value="vernam">Vernam</option>
+                        <option value="vigenere">Vigenere</option>
+                    </optgroup>
+                </select>
+                <span class="result" >{{result}}</span>
+                <input class="button" type="submit" value="Encrypt"/>
+            </form> 
+        </div>
+
+        <div id="decrypt_block">
+            <form action = "/decrypt" name="decrypt" id="decrypt_form" method="post">
+                <h>DECRYPT</h><br/>
+                <textarea name="input_text" required=true placeholder="Input text"></textarea><br/>
+                <textarea name="key" required=true placeholder="Key"></textarea><br/>
+                <select name="cipher" required=true>
+                    <optgroup label="Cipher: ">
+                        <option value="ceasar">Ceasar</option>
+                        <option value="vernam">Vernam</option>
+                        <option value="vigenere">Vigenere</option>
+                    </optgroup>
+                </select>
+                <span class="result" >{{result}}</span>
+                <input class="button" type="submit" value="Decrypt"/>
+            </form> 
+            </div>
+
+        <div id="train_block">
+            <form action = "/train" name="train" id="train_form" method="post">
+                <h>TRAIN</h><br/>
+                <textarea name="input_text" required=true placeholder="Input text"></textarea><br/>
+                <input class="button" type="submit" value="Train"/>
+            </form> 
+        </div>
+
+        <div id="hack_block">
+            <form action = "/hack" name="hack" id="hack_form" method="post">
+                <h>HACK</h><br/>
+                <textarea name="input_text" required=true placeholder="Input text"></textarea><br/>
+                <span class="result">{{result}}</span>
+                <input class="button" type="submit" value="Hack"/>
+            </form> 
+        </div>
+    </body>
+</html>
